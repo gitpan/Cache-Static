@@ -22,6 +22,7 @@
 ##
 
 package Cache::Static::HTML_Mason_Util::hmc;
+our $VERSION = '0.1';
 
 use strict;
 use warnings;

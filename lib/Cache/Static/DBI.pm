@@ -21,11 +21,12 @@
 #
 ##
 
+package Cache::Static::DBI;
+our $VERSION = '0.1';
+
 use DBI;
 use Cache::Static;
 use strict;
-
-package Cache::Static::DBI;
 
 sub wrap {
 	my ($class) = @_;

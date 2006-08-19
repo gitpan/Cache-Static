@@ -21,11 +21,12 @@
 #
 ##
 
-
 package Cache::Static::HTML_Mason_Util;
+our $VERSION = '0.1';
 
 use strict;
 use warnings;
+
 eval { require Cache::Static::HTML_Mason_Util::hmc; };
 my $no_hmc = $@;
 

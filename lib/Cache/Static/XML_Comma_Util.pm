@@ -23,6 +23,7 @@
 
 
 package Cache::Static::XML_Comma_Util;
+our $VERSION = '0.1';
 
 use strict;
 use warnings;

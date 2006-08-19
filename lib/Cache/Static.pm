@@ -22,6 +22,7 @@
 ##
 
 package Cache::Static;
+our $VERSION = '0.100';
 
 use strict;
 use warnings;
