@@ -1,22 +1,10 @@
 Revision history for Perl extension Cache::Static.
 
---------------------------------
-0.99.01  2006/08/19 13:34:06 GMT
---------------------------------
-
-- mercy!!! (v0.100 !> v0.99 to CPAN)
-
 ------------------------------
-0.100  2006/08/19 13:24:06 GMT
+0.9901  2006/08/19 19:45:00 GMT
 ------------------------------
 
-- okay CPAN, you win, I put the version numbers back...
-
------------------------------
-0.99  2006/08/19 13:04:06 GMT
------------------------------
-
-- trying to fool CPAN into forgetting some version numbers, arg...
+- fighting with CPAN's "version numbers must increase" mandate...
 
 -----------------------------
 0.98  2006/08/19 12:56:06 GMT

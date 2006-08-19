@@ -22,7 +22,7 @@
 ##
 
 package Cache::Static;
-our $VERSION = '0.99.01';
+our $VERSION = '0.9901';
 
 use strict;
 use warnings;
@@ -32,7 +32,6 @@ use Digest::MD5 qw(md5_base64);
 #allow serialization of code refs
 $Storable::Deparse = 1;
 
-our $VERSION = '0.99';
 our $ROOT = '/usr/local/Cache-Static';
 our $LOGFILE = "$ROOT/log"; 
 our $namespace = 'DEFAULT';
@@ -691,7 +690,7 @@ land.
 
 =head1 DESCRIPTION
 
-  This is the "entry point" for using the XML::Comma modules.
+  The guts of Cache::Static, in all its glory.
   
 =head1 AUTHOR
 

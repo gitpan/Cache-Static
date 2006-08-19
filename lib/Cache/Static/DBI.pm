@@ -22,7 +22,6 @@
 ##
 
 package Cache::Static::DBI;
-our $VERSION = '0.1';
 
 use DBI;
 use Cache::Static;
