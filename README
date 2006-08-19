@@ -1,4 +1,4 @@
-Cache::Static version 0.90
+Cache::Static version 0.98
 ==============================
 
 The README is used to introduce the module and provide instructions on
@@ -16,7 +16,7 @@ INSTALLATION
 
 To install this module type the following:
 
-   perl Makefile.PL
+   perl Makefile.PL $ARGS #(see INSTALL for possible options)
    make
    make test
    make install
@@ -26,6 +26,9 @@ DEPENDENCIES
 This module requires these other modules and libraries:
 
   Digest::MD5
+
+Fcntl, XML::Comma, DBI, and HTML::Mason are also highly
+recommended.
 
 COPYRIGHT AND LICENCE
 

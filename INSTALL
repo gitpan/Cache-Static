@@ -20,10 +20,12 @@ if you are happy to let Makefile.PL auto-detect extensions and wrappers:
 otherwise, specify any extensions/wrappers you want to exclude on the
 Makefile.PL command line, e.g. to exclude HTML::Mason support:
 	perl Makefile.PL -HTML::Mason
-note you can also disable hmc, which is an HTML::Mason::Compiler that
+
+Note you can also disable hmc, which is an HTML::Mason::Compiler that
 tries to determine what physical files HTML::Mason relies on.
-this is needed if you have overridden any HTML::Mason classes,
-but leaves HTML_Mason_Util::cache_it availble
+You probably want to exclude this functionality by passing -hmc if
+you have overridden any HTML::Mason classes. Note that this leaves
+HTML_Mason_Util::cache_it availble:
 	perl Makefile.PL -hmc
 
 

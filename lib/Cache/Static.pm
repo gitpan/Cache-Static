@@ -31,7 +31,7 @@ use Digest::MD5 qw(md5_base64);
 #allow serialization of code refs
 $Storable::Deparse = 1;
 
-our $VERSION = '0.97';
+our $VERSION = '0.98';
 our $ROOT = '/usr/local/Cache-Static';
 our $LOGFILE = "$ROOT/log"; 
 our $namespace = 'DEFAULT';
@@ -286,10 +286,11 @@ sub make_friendly_key {
 		if(ref($val)) {
 			if(ref($val) eq 'ARRAY') {
 				$val = join("&$arg=", @$val);
-			} elsif(ref($val) eq 'XML::Comma::Doc'
+			} elsif($val->isa('XML::Comma::Doc')
 					&& _has_timestamp('XML::Comma')) {
-				$val = $val->doc_key;
+				$val = "XML::Comma::Doc:".$val->doc_key;
 			} else {
+				_log(3, "got a ".ref($val)." and we're just freezing it...");
 				$val = Storable::freeze($val);
 			}
 		}
@@ -626,4 +627,77 @@ sub _mkdir_p {
 }
 
 1;
+__END__
 
+
+=head1 NAME
+
+Cache::Static - Caching without freshness concerns
+
+=head1 SYNOPSIS
+
+HTML::Mason instructions only for now...
+In handler.pl:
+	use Cache::Static;
+
+In any component you where you have a well defined set of
+dependencies which change the output:
+	<%init>
+	my $_cs_deps = [
+	#file dependencies - only regenerate if a file has changed
+		'file|/path/to/some_configuration_file',
+
+	#DBI dependencies - still under development - WONT WORK
+	#DBI dependencies: note the third argument is a DSN
+		'_DBI|table|mysql:scache_test_db|test_table',
+		'_DBI|db|mysql:scache_test_db',
+	#not yet implemented:
+	#column level depends, e.g. "DBI|column|$dsn|$tablename|$columname"
+	#row depends, e.g. "DBI|row|$dsn|$tablename|$uid_column_name|$uid_value"
+	
+	#XML::Comma dependencies - only regenerate if a Doc or Store has changed
+		"_XML::Comma|Doc|$doc_key",
+		"_XML::Comma|Store|$def|$store",
+
+	#time dependencies (WARNING: these are discouraged, see doc/NOTE-time-deps)
+		'time|15s', #every 15 seconds
+		'time|M:15s', #every 15 seconds after the minute
+		'time|H:2m', #every 2 minutes past the hour
+		'time|W:2d3h5m0s', #every Tuesday at 3:05 AM
+
+	#modifiers (indicate behavior when the file cannot be found)
+		'file-0|/tmp/foo', #if ! -e /tmp/foo, regenerate
+		'file-1|/tmp/foo', #if ! -e /tmp/foo, serve
+		'file|/tmp/foo',   #use the config value "dep_file_not_found_returns"
+	#note modifiers also work on extensions, e.g.
+		'_DBI-1|db|mysql:scache_test_db',
+		'_XML::Comma-0|Store|mm_item|post',
+	#etc... but modifiers CANNOT be used with times (since they have no
+	#file backing on disk)
+	];
+
+	#whatever you have in $_cs_deps above...
+	return if Cache::Static::HTML_Mason_Util::cache_it(
+		$r, $m, 1, $_cs_deps);
+
+	#...
+	#rest of init block
+	#...
+	</%init>
+
+TODO: an overview (and decent API) for usage outside of HTML::Mason
+land.
+
+=head1 DESCRIPTION
+
+  This is the "entry point" for using the XML::Comma modules.
+  
+=head1 AUTHOR
+
+  scache@mediamatters.org
+
+=head1 SEE ALSO
+
+  https://chronicle.allafrica.com:8080/scache/
+
+=cut

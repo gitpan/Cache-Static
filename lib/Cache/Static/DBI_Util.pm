@@ -28,8 +28,6 @@ use strict;
 use warnings;
 require Cache::Static;
 
-our $VERSION = '0.01';
-
 sub _get_timestamp_file {
 	my ($type, $spec) = @_;
 	Cache::Static::_log(4, "DBI_Util: in get_timestamp_file for $type $spec");

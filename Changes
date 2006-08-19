@@ -1,6 +1,12 @@
 Revision history for Perl extension Cache::Static.
 
 -----------------------------
+0.98  2006/08/19 12:56:06 GMT
+-----------------------------
+
+- add (stubbed) docs & otherwise prepare for CPAN
+
+-----------------------------
 0.97  2006/08/11 20:31:58 GMT
 -----------------------------
 

@@ -53,7 +53,9 @@ foreach my $ext (@extensions) {
 		$pms->{"lib/Cache/Static/$name.pm"} = 
 			"blib/lib/Cache/Static/$name.pm";
 		if($ext eq 'HTML::Mason') {
-			unless($disable_hmc) {
+			if($disable_hmc) {
+				warn "disabling HTML::Mason compiler as per your request\n";
+			} else {
 				$pms->{"lib/Cache/Static/HTML_Mason_Util/hmc.pm"} = 
 					"blib/lib/Cache/Static/HTML_Mason_Util/hmc.pm";
 			}
@@ -83,3 +85,9 @@ WriteMakefile(
 	PM                => $pms,
 );
 
+#install cache_static.macro
+use misc::MakeMakerMod;
+misc::MakeMakerMod::add_steps(
+	step => "install",
+	what => "perl misc/install-extras.pl"
+);

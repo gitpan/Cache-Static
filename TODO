@@ -1,3 +1,11 @@
+- .pod DOCUMENTATION !!!
+
+- API and docs for non-HTML::Mason usage
+
+- we don't detect the error of 
+	"_XML::Comma|Store|Post|main|$id"
+	(that should be Doc, not Store - detect by the number of pipes in the spec)
+
 - automatically skip tests that aren't relevant if we aren't using
 	that extension (ie Makefile.PL -DBI should imply we don't try
 	to run dbi.t)

@@ -29,8 +29,6 @@ use warnings;
 eval { require Cache::Static::HTML_Mason_Util::hmc; };
 my $no_hmc = $@;
 
-our $VERSION = '0.01';
-
 my $hmc = $no_hmc ? undef : Cache::Static::HTML_Mason_Util::hmc->new;
 
 sub cache_it {

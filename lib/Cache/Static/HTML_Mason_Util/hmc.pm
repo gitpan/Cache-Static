@@ -28,8 +28,6 @@ use warnings;
 
 use vars qw ( @ISA );
 
-our $VERSION = '0.01';
-
 use HTML::Mason;
 use HTML::Mason::Compiler;
 use HTML::Mason::Compiler::ToObject;
