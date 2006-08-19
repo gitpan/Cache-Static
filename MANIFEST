@@ -1,0 +1,9 @@
+Changes
+Makefile.PL
+MANIFEST
+README
+lib/Cache/Static.pm
+lib/Cache/Static/DBI.pm
+mk
+META.yml                                 Module meta-data (added by MakeMaker)
+TODO

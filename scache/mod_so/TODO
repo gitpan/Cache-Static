@@ -1,0 +1,7 @@
+figure out how to get /Location container and/or param related to
+scache-handler programmatically (avoid ugly #define at top)
+
+also add a parameter for backend
+#define SCACHE_ROOT ...
+#define BACKEND ...
+

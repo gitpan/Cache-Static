@@ -1,0 +1,14 @@
+#mod_so version
+LoadModule scache_module      libexec/httpd/mod_scache.so
+AddModule mod_scache.c
+
+<Location /scache>
+    SetHandler scache-handler
+</Location>
+
+#mod_perl version
+<Location /scache.pl> 
+    SetHandler perl-script
+    PerlHandler Apache::scache
+</Location>
+
