@@ -31,7 +31,7 @@ use Digest::MD5 qw(md5_base64);
 #allow serialization of code refs
 $Storable::Deparse = 1;
 
-our $VERSION = '0.98';
+our $VERSION = '0.99';
 our $ROOT = '/usr/local/Cache-Static';
 our $LOGFILE = "$ROOT/log"; 
 our $namespace = 'DEFAULT';
