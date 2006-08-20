@@ -22,24 +22,26 @@ sub usage {
 }
 
 my $disable_hmc = 0;
-foreach my $i (0..$#ARGV) {
+my $i = 0;
+while($i <= $#ARGV) {
 	$arg = $ARGV[$i];
 	if($arg =~ /^\-x(=)?hmc$/i) {
 		$disable_hmc = 1;
+		#remove from ARGV so MakeMaker isn't confused
 		splice(@ARGV, $i, $i+1);
-		#remove from ARGV so MakeMaker isn't confused
-	} elsif($arg =~ /^]\-x(=)?.*$/) {
-		my $name = substr($arg, 1);
+	} elsif($arg =~ /^\-x(=)?.*$/) {
+		my $name = $arg;
+		$name =~ s/\-x(=)?//;
 		#remove an extension/wrapper
-		@extensions = grep(!/^$name$/, @extensions);
-		@wrappers = grep(!/^$name$/, @wrappers);
-		#remove from ARGV so MakeMaker isn't confused
+		@extensions = grep(!/^$name$/i, @extensions);
+		@wrappers = grep(!/^$name$/i, @wrappers);
 		splice(@ARGV, $i, $i+1);
 	} elsif($arg =~ /^\+.*$/) {
 		die "do we really want to allow force-adding an extension/wrapper?";
 	} else {
 		# let this argument fall through to MakeMaker
 		## usage("unknown argument to Makefile.PL: $arg");
+		$i++;
 	}
 }
 
@@ -90,6 +92,12 @@ WriteMakefile(
 	PREREQ_PM         => $prereq_pms,
 	PM                => $pms,
 );
+
+open(F, ">lib/Cache/Static/Configuration.pm");
+print F "package Cache::Static::Configuration;\n1;\n__DATA__\n\n";
+print F "extensions => [ ".join(", ", map { "'$_'" } @extensions)." ],\n";
+print F "wrappers => [ ".join(", ", map { "'$_'" } @wrappers)." ],\n";
+close(F);
 
 #install cache_static.macro
 use misc::MakeMakerMod;

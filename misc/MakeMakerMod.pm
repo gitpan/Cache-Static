@@ -30,4 +30,40 @@ sub add_steps {
 }
 
 1;
+__END__
+
+=begin text
+
+wtf
+
+=end text
+
+=head1 NAME
+
+MakeMakerMod - easily modify MakeMaker Makefiles
+
+=head1 SYNOPSIS
+
+It's quite difficult to do something as simple as
+adding an install step to be run at install time (if
+it is even possible at all) with ExtUtils::MakeMaker.
+This module hackishly fixes that.
+
+Example usage would look something like this:
+
+  WriteMakefile(%args);
+  MakeMakerMod::add_steps(
+    step => "install",
+    what => "perl misc/install-extras.pl"
+  );
+
+=head1 DESCRIPTION
+
+  A horrible hack that can be horribly useful.
+
+=head1 AUTHOR
+   
+  Brian Szymanski <scache@allafrica.com>
+
+=cut
 

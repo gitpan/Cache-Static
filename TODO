@@ -1,17 +1,16 @@
+- add a hook to install static-cache-cleanup.pl in Makefile.PL
+
 - allow for interactive prompting of modules to include/exclude
-	(in fact, do this by default) so we can run from CPAN and still
-	tweak as necessary
+	(in fact, do this unless we got a -x= on the cmd line) so we can
+	run from CPAN and not think about what we want enabled and the
+	syntax for doing it on the cmdline
 
 - API and docs for non-HTML::Mason usage
-
-- automatically skip tests that aren't relevant if we aren't using
-	that extension (ie Makefile.PL -DBI should imply we don't try
-	to run dbi.t)
 
 - ./t/filedep.t doesn't clean up /tmp/Cache-Static-test/ after itself,
 	and should be using mktemp anyway
 
-- more .pod documentation...
+- more .pod documentation for sub-modules, etc.
 
 - we don't detect the error of 
 	"_XML::Comma|Store|Post|main|$id"
@@ -21,12 +20,12 @@
   see svn diff between dbi.t in revs. 599 and 603
   https://chronicle.allafrica.com:8080/svnweb/index.cgi/allafrica/log/trunk/Cache-Static/t/dbi.t
 
-a bug: when we change a depended upon component, we don't check
-the filemod time? or perhaps we aren't checking down the tree?
+- a bug: when we change a depended upon component, we don't check
+	the filemod time? or perhaps we aren't checking down the tree?
+		(note: i have no idea what this refers to, or if it still
+		exists. maybe it was something in hmc.pm?)
 
-add a hook to install static-cache-cleanup.pl in Makefile.PL
-
--- if there is no config file, do we keep trying to load it in?
+- if there is no config file, do we keep trying to load it in?
 
 -- API should not force you to call most of the it's making you call...
 new API:

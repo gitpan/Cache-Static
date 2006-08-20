@@ -6,7 +6,14 @@ use lib "t";
 use strict;
 use TEST;
 
-#if we can't load HTML::Mason & HTML::Mason::Tests, skip all tests
+#skip XML::Comma tests if it's not in Configuration.pm
+unless(Cache::Static::is_enabled("XML::Comma")) {
+	warn "skipping XML::Comma tests - XML::Comma not enabled in Configuration.pm\n";
+	print "1..1\nok 1\n";
+	exit 0;
+}
+
+#if we can't load XML::Comma, skip all tests
 eval {
    require XML::Comma;
 }; if($@) {

@@ -22,7 +22,7 @@
 ##
 
 package Cache::Static;
-our $VERSION = '0.9902';
+our $VERSION = '0.9903';
 
 use strict;
 use warnings;
@@ -123,8 +123,35 @@ eval {
 ###########################
 ### glue for extensions ###
 ###########################
-my @POSSIBLE_HELPER_EXTENSIONS = qw ( HTML::Mason );
-my @POSSIBLE_TIMESTAMP_EXTENSIONS = qw ( XML::Comma DBI );
+use Cache::Static::Configuration;
+sub get_configuration_data {
+	no strict 'refs';
+	my $fh = *{ "Cache::Static::Configuration::DATA" };
+	my $block = join ( '', <$fh> );
+	my $conf = eval "{ $block }";
+	return $conf->{$_[0]};
+}
+
+sub find_intersection {
+	my ($ref1, $ref2) = @_;
+	my (%h, @ret);
+	foreach my $i (@$ref1, @$ref2) { $h{$i}++; };
+	foreach my $e (keys %h) {
+		push @ret, $e if($h{$e} == 2);
+	}
+	return @ret;
+}
+
+my @enabled_extensions = @{get_configuration_data("extensions")};
+sub is_enabled {
+	my $module = shift;
+	return grep(/^$module$/i, @enabled_extensions);
+}
+
+my @POSSIBLE_HELPER_EXTENSIONS = find_intersection(\@enabled_extensions,
+	[ qw ( HTML::Mason ) ] );
+my @POSSIBLE_TIMESTAMP_EXTENSIONS = find_intersection(\@enabled_extensions,
+	[ qw ( XML::Comma DBI ) ] );
 
 my @helper_extensions;
 foreach my $ext (@POSSIBLE_HELPER_EXTENSIONS) {
@@ -636,57 +663,63 @@ Cache::Static - Caching without freshness concerns
 
 =head1 SYNOPSIS
 
-HTML::Mason instructions only for now...
+=head2 HTML::Mason instructions
+
 In handler.pl:
-	use Cache::Static;
+  use Cache::Static;
 
 In any component you where you have a well defined set of
 dependencies which change the output:
-	<%init>
-	my $_cs_deps = [
-	#file dependencies - only regenerate if a file has changed
-		'file|/path/to/some_configuration_file',
 
-	#DBI dependencies - still under development - WONT WORK
-	#DBI dependencies: note the third argument is a DSN
-		'_DBI|table|mysql:scache_test_db|test_table',
-		'_DBI|db|mysql:scache_test_db',
-	#not yet implemented:
-	#column level depends, e.g. "DBI|column|$dsn|$tablename|$columname"
-	#row depends, e.g. "DBI|row|$dsn|$tablename|$uid_column_name|$uid_value"
-	
-	#XML::Comma dependencies - only regenerate if a Doc or Store has changed
-		"_XML::Comma|Doc|$doc_key",
-		"_XML::Comma|Store|$def|$store",
+  <%init>
+  my $_cs_deps = [
+  #file dependencies - only regenerate if a file has changed
+    'file|/path/to/some_configuration_file',
 
-	#time dependencies (WARNING: these are discouraged, see doc/NOTE-time-deps)
-		'time|15s', #every 15 seconds
-		'time|M:15s', #every 15 seconds after the minute
-		'time|H:2m', #every 2 minutes past the hour
-		'time|W:2d3h5m0s', #every Tuesday at 3:05 AM
+  #DBI dependencies - still under development - WONT WORK
+  #DBI dependencies: note the third argument is a DSN
+    '_DBI|table|mysql:scache_test_db|test_table',
+    '_DBI|db|mysql:scache_test_db',
 
-	#modifiers (indicate behavior when the file cannot be found)
-		'file-0|/tmp/foo', #if ! -e /tmp/foo, regenerate
-		'file-1|/tmp/foo', #if ! -e /tmp/foo, serve
-		'file|/tmp/foo',   #use the config value "dep_file_not_found_returns"
-	#note modifiers also work on extensions, e.g.
-		'_DBI-1|db|mysql:scache_test_db',
-		'_XML::Comma-0|Store|mm_item|post',
-	#etc... but modifiers CANNOT be used with times (since they have no
-	#file backing on disk)
-	];
+  #not yet implemented:
+  #column level depends, e.g. "DBI|column|$dsn|$tablename|$columname"
+  #row depends, e.g. "DBI|row|$dsn|$tablename|$uid_column_name|$uid_value"
 
-	#whatever you have in $_cs_deps above...
-	return if Cache::Static::HTML_Mason_Util::cache_it(
-		$r, $m, 1, $_cs_deps);
+  #XML::Comma dependencies - only regenerate if a Doc or Store has changed
+    "_XML::Comma|Doc|$doc_key",
+    "_XML::Comma|Store|$def|$store",
 
-	#...
-	#rest of init block
-	#...
-	</%init>
+  #time dependencies (WARNING: these are discouraged, see doc/NOTE-time-deps)
+    'time|15s', #every 15 seconds
+    'time|M:15s', #every 15 seconds after the minute
+    'time|H:2m', #every 2 minutes past the hour
+    'time|W:2d3h5m0s', #every Tuesday at 3:05 AM
 
-TODO: an overview (and decent API) for usage outside of HTML::Mason
-land.
+  #modifiers (indicate behavior when the file cannot be found)
+    'file-0|/tmp/foo', #if ! -e /tmp/foo, regenerate
+    'file-1|/tmp/foo', #if ! -e /tmp/foo, serve
+    'file|/tmp/foo',   #use config value "dep_file_not_found_returns"
+
+  #note modifiers also work on extensions, e.g.
+    '_DBI-1|db|mysql:scache_test_db',
+    '_XML::Comma-0|Store|mm_item|post',
+
+  #etc... but modifiers CANNOT be used with times (since they have no
+  #file backing on disk)
+  ];
+
+  #whatever you have in $_cs_deps above...
+  return if Cache::Static::HTML_Mason_Util::cache_it($r, $m, 1, $_cs_deps);
+
+  #...
+  #rest of init block
+  #...
+  </%init>
+
+=head2 Other Usage
+
+TODO: an overview (and decent API) for usage outside of 
+HTML::Mason land.
 
 =head1 DESCRIPTION
 
@@ -694,7 +727,7 @@ land.
   
 =head1 AUTHOR
 
-  Brian Szymanski <scache@mediamatters.org>
+  Brian Szymanski <scache@allafrica.com>
 
 =head1 SEE ALSO
 

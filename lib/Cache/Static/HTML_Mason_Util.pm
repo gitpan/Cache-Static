@@ -26,6 +26,7 @@ package Cache::Static::HTML_Mason_Util;
 use strict;
 use warnings;
 
+#TODO: store / pull this from Configuration.pm
 eval { require Cache::Static::HTML_Mason_Util::hmc; };
 my $no_hmc = $@;
 

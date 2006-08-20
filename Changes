@@ -1,8 +1,18 @@
 Revision history for Perl extension Cache::Static.
 
-------------------------------
+-------------------------------
+0.9903  2006/08/20 11:24:36 GMT
+-------------------------------
+
+- introduce Configuration.pm @ la comma 
+- store wanted extensions in Configuration.pm, don't bother trying to load
+   stuff that isn't in there
+- only run tests that we should, according to Configuration.pm
+- fix up POD docs.
+
+-------------------------------
 0.9902  2006/08/20 07:38:53 GMT
-------------------------------
+-------------------------------
 
 - fix up Makefile.PL so it works with CPAN (pass extra args thru)
 
