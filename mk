@@ -20,6 +20,7 @@ clean:
 	rm -f scache/mod_so/*.so
 	rm -f Makefile.old
 	rm -rf blib
+	rm -rf .test
 
 tarball: tar
 tgz: tar
@@ -28,3 +29,4 @@ tar: clean
 	cd $(TARBALL_DEST) && \
 	rm -f $(TARBALL_NAME) && \
 	tar cvz --exclude='.svn' -f ${TARBALL_NAME} $(PACKAGE_NAME)
+

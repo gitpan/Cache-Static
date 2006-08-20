@@ -15,14 +15,14 @@
 #    GNU General Public License for more details.
 #
 #    For more information about Cache::Static, point a web browser at
-#    http://daemon.mediamatters.org/tech/scache or read the
+#    https://chronicle.allafrica.com:8080/scache/ or read the
 #    documentation included with the Cache::Static distribution in the 
 #    doc/ directory
 #
 ##
 
 package Cache::Static;
-our $VERSION = '0.9901';
+our $VERSION = '0.9902';
 
 use strict;
 use warnings;
@@ -694,7 +694,7 @@ land.
   
 =head1 AUTHOR
 
-  scache@mediamatters.org
+  Brian Szymanski <scache@mediamatters.org>
 
 =head1 SEE ALSO
 

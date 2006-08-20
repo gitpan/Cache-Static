@@ -11,10 +11,10 @@ sub usage {
 	my @ext = (@extensions, @wrappers);
 	print STDERR "$arg\n";
 	print STDERR "perl Makefile.PL\n";
-	print STDERR '   [ -$extension1 -$extension2 ... ]'."\n";
+	print STDERR '   [ -x$extension1 -x$extension2 ... ]'."\n";
 	print STDERR "      valid extensions are: @ext\n";
 	print STDERR "      note that wrappers can also be included here\n";
-	print STDERR "   [ -hmc ]\n";
+	print STDERR "   [ -xhmc ]\n";
 	print STDERR "      this disables HTML_Mason_Util trying to detemrine\n";
 	print STDERR "      which component files to depend on - useful if you\n";
 	print STDERR "      have, for example, overridden the resolver class\n";
@@ -22,18 +22,24 @@ sub usage {
 }
 
 my $disable_hmc = 0;
-foreach my $arg (@ARGV) {
-	if($arg =~ /^-hmc$/i) {
+foreach my $i (0..$#ARGV) {
+	$arg = $ARGV[$i];
+	if($arg =~ /^\-x(=)?hmc$/i) {
 		$disable_hmc = 1;
-	} elsif($arg =~ /^\-.*$/) {
+		splice(@ARGV, $i, $i+1);
+		#remove from ARGV so MakeMaker isn't confused
+	} elsif($arg =~ /^]\-x(=)?.*$/) {
 		my $name = substr($arg, 1);
 		#remove an extension/wrapper
 		@extensions = grep(!/^$name$/, @extensions);
 		@wrappers = grep(!/^$name$/, @wrappers);
+		#remove from ARGV so MakeMaker isn't confused
+		splice(@ARGV, $i, $i+1);
 	} elsif($arg =~ /^\+.*$/) {
 		die "do we really want to allow force-adding an extension/wrapper?";
 	} else {
-		usage("unknown argument to Makefile.PL: $arg");
+		# let this argument fall through to MakeMaker
+		## usage("unknown argument to Makefile.PL: $arg");
 	}
 }
 
