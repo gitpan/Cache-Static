@@ -10,7 +10,7 @@ use Cache::Static;
 
 #skip DBI tests if it's not in Configuration.pm
 unless(Cache::Static::is_enabled("DBI")) {
-	warn "skipping DBI tests - DBI not enabled in Configuration.pm\n";
+	warn "skipping tests - DBI not enabled in Configuration.pm\n";
 	print "1..1\nok 1\n";
 	exit 0;
 }

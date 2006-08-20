@@ -22,7 +22,7 @@
 ##
 
 package Cache::Static;
-our $VERSION = '0.9903';
+our $VERSION = '0.9904';
 
 use strict;
 use warnings;

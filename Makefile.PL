@@ -1,40 +1,40 @@
 use 5.005;
 use ExtUtils::MakeMaker;
 
-my @extensions = qw ( XML::Comma HTML::Mason DBI ) ;
-my @wrappers   = qw ( DBI );
+my @POSSIBLE_EXTENSIONS = qw ( XML::Comma HTML::Mason DBI );
+my @POSSIBLE_WRAPPERS   = qw ( DBI );
+my @extensions          = qw ( XML::Comma HTML::Mason );
+my @wrappers            = qw ();
 
-sub usage {
-	my $arg = shift;
-	chomp($arg);
-
-	my @ext = (@extensions, @wrappers);
-	print STDERR "$arg\n";
-	print STDERR "perl Makefile.PL\n";
-	print STDERR '   [ -x$extension1 -x$extension2 ... ]'."\n";
-	print STDERR "      valid extensions are: @ext\n";
-	print STDERR "      note that wrappers can also be included here\n";
-	print STDERR "   [ -xhmc ]\n";
-	print STDERR "      this disables HTML_Mason_Util trying to detemrine\n";
-	print STDERR "      which component files to depend on - useful if you\n";
-	print STDERR "      have, for example, overridden the resolver class\n";
-	exit(1);
-}
-
-my $disable_hmc = 0;
+#HACK: use 2 for true, "" for false, so that $default_disable ne $disable works
+my $default_disable_hmc = my $disable_hmc = "";
 my $i = 0;
 while($i <= $#ARGV) {
 	$arg = $ARGV[$i];
-	if($arg =~ /^\-x(=)?hmc$/i) {
-		$disable_hmc = 1;
+	if($arg =~ /^(\-|\+)?x(=)?hmc$/i) {
+		$disable_hmc = (defined($1) && ($1 eq '+')) ? 0 : 1;
 		#remove from ARGV so MakeMaker isn't confused
 		splice(@ARGV, $i, $i+1);
-	} elsif($arg =~ /^\-x(=)?.*$/) {
+	} elsif($arg =~ /^(\-|\+)?x(=)?.*$/) {
+		my $enable = 1 if(defined($1) && ($1 eq '+'));
 		my $name = $arg;
-		$name =~ s/\-x(=)?//;
-		#remove an extension/wrapper
-		@extensions = grep(!/^$name$/i, @extensions);
-		@wrappers = grep(!/^$name$/i, @wrappers);
+		$name =~ s/(\-|\+)?x(=)?//;
+		#get case right
+		my @t = grep(/$name$/i, (@POSSIBLE_EXTENSIONS, @POSSIBLE_WRAPPERS));
+		$name = $t[0] || die "unknown extension/wrapper: $name";
+		if($enable) {
+			#add anything that's in possible, but not actual extensions/wrappers
+			push @extensions, $name if(
+				grep(/^$name$/i, @POSSIBLE_EXTENSIONS) &&
+					!grep(/^$name$/i, @extensions));
+			push @wrappers, $name if(
+				grep(/^$name$/i, @POSSIBLE_WRAPPERS) &&
+					!grep(/^$name$/i, @wrappers));
+		} else {
+			#remove an extension/wrapper
+			@extensions = grep(!/^$name$/i, @extensions);
+			@wrappers = grep(!/^$name$/i, @wrappers);
+		}
 		splice(@ARGV, $i, $i+1);
 	} elsif($arg =~ /^\+.*$/) {
 		die "do we really want to allow force-adding an extension/wrapper?";
@@ -62,8 +62,11 @@ foreach my $ext (@extensions) {
 			"blib/lib/Cache/Static/$name.pm";
 		if($ext eq 'HTML::Mason') {
 			if($disable_hmc) {
-				warn "disabling HTML::Mason compiler as per your request\n";
+				warn "disabling HTML::Mason compiler as per your request\n"
+					unless($disable_hmc eq $default_disable_hmc);
 			} else {
+				warn "including HTML::Mason compiler as per your request\n"
+					unless($disable_hmc eq $default_disable_hmc);
 				$pms->{"lib/Cache/Static/HTML_Mason_Util/hmc.pm"} = 
 					"blib/lib/Cache/Static/HTML_Mason_Util/hmc.pm";
 			}
@@ -86,9 +89,15 @@ foreach my $ext (@wrappers) {
 	}
 }
 
+#always install Configuration.pm
+$pms->{'lib/Cache/Static/Configuration.pm'} =
+	'blib/lib/Cache/Static/Configuration.pm';
+
 WriteMakefile(
 	NAME              => 'Cache::Static',
 	VERSION_FROM      => 'lib/Cache/Static.pm', # finds $VERSION
+	EXE_FILES         => [ <bin/*.pl> ],
+	INSTALLSCRIPT     => '/usr/local/bin',
 	PREREQ_PM         => $prereq_pms,
 	PM                => $pms,
 );
@@ -105,3 +114,22 @@ misc::MakeMakerMod::add_steps(
 	step => "install",
 	what => "perl misc/install-extras.pl"
 );
+
+sub usage {
+	my $arg = shift;
+	chomp($arg);
+
+	my @ext = (@extensions, @wrappers);
+	print STDERR "$arg\n";
+	print STDERR "perl Makefile.PL\n";
+	print STDERR '   [ -x$extension1 -x$extension2 ... ]'."\n";
+	print STDERR "      valid extensions are: @ext\n";
+	print STDERR "      note that wrappers can also be included here\n";
+	print STDERR "   [ -xhmc ]\n";
+	print STDERR "      this disables HTML_Mason_Util trying to detemrine\n";
+	print STDERR "      which component files to depend on - useful if you\n";
+	print STDERR "      have, for example, overridden the resolver class\n";
+	exit(1);
+}
+
+

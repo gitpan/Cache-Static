@@ -1,6 +1,14 @@
 Revision history for Perl extension Cache::Static.
 
 -------------------------------
+0.9904  2006/08/20 19:07:09 GMT
+-------------------------------
+
+- install Configuration.pm, duh
+- install binaries to /usr/local/bin
+- enable Makefile.PL +x=$extension syntax
+
+-------------------------------
 0.9903  2006/08/20 11:24:36 GMT
 -------------------------------
 

@@ -8,7 +8,7 @@ use TEST;
 
 #skip XML::Comma tests if it's not in Configuration.pm
 unless(Cache::Static::is_enabled("XML::Comma")) {
-	warn "skipping XML::Comma tests - XML::Comma not enabled in Configuration.pm\n";
+	warn "skipping tests - XML::Comma not enabled in Configuration.pm\n";
 	print "1..1\nok 1\n";
 	exit 0;
 }

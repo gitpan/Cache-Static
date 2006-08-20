@@ -10,7 +10,7 @@ use Cache::Static;
 
 #skip HTML::Mason tests if it's not in Configuration.pm
 unless(Cache::Static::is_enabled("HTML::Mason")) {
-	warn "skipping HTML::Mason tests - HTML::Mason not enabled in Configuration.pm\n";
+	warn "skipping tests - HTML::Mason not enabled in Configuration.pm\n";
 	print "1..1\nok 1\n";
 	exit 0;
 }

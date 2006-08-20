@@ -2,8 +2,14 @@ Changes
 Makefile.PL
 MANIFEST
 README
+bin/cache-static-cleanup.pl
 lib/Cache/Static.pm
+lib/Cache/Static/Configuration.pm
 lib/Cache/Static/DBI.pm
+lib/Cache/Static/DBI_Util.pm
+lib/Cache/Static/HTML_Mason_Util.pm
+lib/Cache/Static/HTML_Mason_Util/hmc.pm
+lib/Cache/Static/XML_Comma_Util.pm
 mk
 META.yml                                 Module meta-data (added by MakeMaker)
 TODO
