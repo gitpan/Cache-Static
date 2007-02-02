@@ -15,14 +15,14 @@
 #    GNU General Public License for more details.
 #
 #    For more information about Cache::Static, point a web browser at
-#    https://chronicle.allafrica.com:8080/scache/ or read the
+#    http://chronicle.allafrica.com/scache/ or read the
 #    documentation included with the Cache::Static distribution in the 
 #    doc/ directory
 #
 ##
 
 package Cache::Static;
-our $VERSION = '0.9904';
+our $VERSION = '0.9905';
 
 use strict;
 use warnings;
@@ -324,6 +324,15 @@ sub make_friendly_key {
 		$key .= "$arg=$val&";
 	}
 	$key =~ s/&$//;
+
+	#fix problem with friendly keys that have a multiple consecutive dashes,
+	#as when they are printed in HTML debugging mode, they can cause SGML
+	#comments to eat what is supposed to be code up to the next literal --
+	#for one-to-one-ness, also map '-' (single dash) to '-1-'
+	#this is really something browsers should work around, but don't. see:
+	#  https://bugzilla.mozilla.org/show_bug.cgi?id=214476
+	$key = join("", map { (/-+/) ? "-".length($_)."-" : $_ }
+		split(/(-+)/, $key));
 
 	return $key;
 }
@@ -731,6 +740,6 @@ HTML::Mason land.
 
 =head1 SEE ALSO
 
-  https://chronicle.allafrica.com:8080/scache/
+  http://chronicle.allafrica.com/scache/
 
 =cut

@@ -15,7 +15,7 @@
 #    GNU General Public License for more details.
 #
 #    For more information about Cache::Static, point a web browser at
-#    https://chronicle.allafrica.com:8080/scache/ or read the
+#    http://chronicle.allafrica.com/scache/ or read the
 #    documentation included with the Cache::Static distribution in the
 #    doc/ directory
 #

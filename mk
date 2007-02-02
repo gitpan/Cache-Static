@@ -1,3 +1,10 @@
+#!/bin/sh
+
+cat >.mk.$$ <<'END'
+#######################
+## make syntax here ###
+#######################
+
 PACKAGE_NAME=Cache-Static
 TARBALL_DEST=../
 TARBALL_NAME=$(PACKAGE_NAME).tgz
@@ -30,3 +37,10 @@ tar: clean
 	rm -f $(TARBALL_NAME) && \
 	tar cvz --exclude='.svn' -f ${TARBALL_NAME} $(PACKAGE_NAME)
 
+######################################
+### do not modify below this line! ###
+######################################
+END
+
+make -f .mk.$$ $*
+rm -f .mk.$$

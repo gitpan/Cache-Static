@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+use strict;
+
 #TODO:
 #- pull ROOT in from Cache::static Config
 #- option for specifying threshold

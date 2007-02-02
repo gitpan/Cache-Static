@@ -2,6 +2,7 @@ To use Cache::Static with XML::Comma documents and stores...
 
 1) cache_static.macro must be installed in your defs directory
    (typically /usr/local/comma/defs or /usr/local/comma/defs/macros)
+   (make install tries to do this automagically for you as of v 0.9901)
 2) add <macro>cache_static</macro> to any def you want to be
    Cache::Static'able
 3) start using it:

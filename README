@@ -21,6 +21,10 @@ To install this module type the following:
    make test
    make install
 
+SEE ALSO
+
+misc/extensions/XML_Comma/README
+
 DEPENDENCIES
 
 This module requires these other modules and libraries:
@@ -34,7 +38,7 @@ COPYRIGHT AND LICENCE
 
 Put the correct copyright and licence information here.
 
-Copyright (C) 2004 by A. U. Thor
+Copyright (C) 2005-2006 by Brian Szymanski
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.4 or,

@@ -1,3 +1,28 @@
+- iframe can be used to preserve caching (as can ajax of course)
+	just use iframe/ajax for your parts that need user-specific info
+	think about that in regards to cache::static
+
+- if hmc.pm is already installed, and then we build w/ -x=hmc,
+	the old hmc.pm is still there, causing problems!
+
+- make test fails w/o root b/c /usr/local/Cache-Static can't be created
+        use a different root in test scripts
+
+- steal good ideas from memcached, write up differences on scache webpage
+	http://www.danga.com/memcached/
+	example code: http://us2.php.net/memcache
+
+- think about hooks for Class::DBI, will be easier than DBI deps although
+	less used... also DBIx::Class
+
+- don't parse sql yerself... see sql::statement:
+  http://kobesearch.cpan.org/htdocs/SQL-Statement/SQL/Statement.html
+
+- t/filedep test 6 "get if same after set and dep touch" fails on mac os x
+
+- add config opt. for default perms (and user/group if poss., so root run
+	doesn't cause perm probs like with Comma docs)...
+
 - add a hook to install static-cache-cleanup.pl in Makefile.PL
 
 - allow for interactive prompting of modules to include/exclude
@@ -18,7 +43,7 @@
 
 - t/dbi.t fails with server in dsn (it's ok if we omit 127.0.0.1 tho)
   see svn diff between dbi.t in revs. 599 and 603
-  https://chronicle.allafrica.com:8080/svnweb/index.cgi/allafrica/log/trunk/Cache-Static/t/dbi.t
+  http://chronicle.allafrica.com/svnweb/index.cgi/allafrica/log/trunk/Cache-Static/t/dbi.t
 
 - a bug: when we change a depended upon component, we don't check
 	the filemod time? or perhaps we aren't checking down the tree?
